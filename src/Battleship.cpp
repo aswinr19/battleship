@@ -2,7 +2,20 @@
 #include "Utils.h"
 using namespace std;
 
-enum shipType{
+enum {
+	AIRCRAFT_CARRIER_SIZE = 5,
+	BATTLESHIP_SIZE = 4,
+	CRUISER_SIZE = 3,
+	DESTROYER_SIZE = 3,
+	SUBMARINE_SIZE = 2,
+
+	BOARD_SIZE = 10,
+	NUM_SHIPS = 5,
+	PLAYER_NAME_SIZE = 8,
+	MAX_SHIP_SIZE = AIRCRAFT_CARRIER_SIZE
+};
+
+enum ShipType{
 
 	ST_NONE = 0,
 	ST_AIRCRAFT_CARRIER,
@@ -12,17 +25,47 @@ enum shipType{
 	ST_SUBMARINE
 };
 
-enum shipOrientationType{
+enum ShipOrientationType{
 
 	SO_HORIZONTAL = 0,
 	SO_VERTICAL
 };
 
-struct shipPostionType{
+struct ShipPostionType{
 
 	int row;
 	int col;
 };
+
+struct Ship{
+
+	ShipType shipType;
+	int shipSize;
+	ShipOrientationType orientation;
+	ShipPostionType postion;
+};
+
+enum GuessType{
+
+	GT_NONE = 0,
+	GT_MISSED,
+	GT_HIT
+};
+
+struct ShipPartType{
+
+	ShipType shipType;
+	bool isHit;
+};
+
+struct Player{
+	char playerName[PLAYER_NAME_SIZE];
+	Ship ships[NUM_SHIPS];
+	GuessType guessBoard[BOARD_SIZE][BOARD_SIZE];
+	ShipPartType shipBoard[BOARD_SIZE][BOARD_SIZE];
+};
+
+
 int main()
 {
 	return 0;
