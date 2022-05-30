@@ -4,6 +4,8 @@
 
 using namespace std;
 
+const char * INPUT_ERROR_STRING = "Input error! Please try again.";
+
 enum {
 	AIRCRAFT_CARRIER_SIZE = 5,
 	BATTLESHIP_SIZE = 4,
@@ -68,12 +70,12 @@ struct Player{
 };
 
 
-void InitializePlayer( Player & player , const char * playerName );
-void Initializeship( Ship & ship , int shipSize , ShipType shipType );
-void PlayeGame(Player & player1 , Player & player2 );
-
+void InitializePlayer(Player &player,const char *playerName);
+void Initializeship(Ship &ship,int shipSize ,ShipType shipType);
+void PlayeGame(Player &player1,Player &player2);
 bool WantToPlayAgain();
-
+void SetupBoards(Player &player);
+void ClearBoards(Player &player);
 
 int main()
 {
@@ -85,7 +87,7 @@ InitializePlayer(player1,"Player1");
 InitializePlayer(player2,"Player2");
 
 do{ 
-	PlayGame(player1 , player2);
+	PlayGame(player1,player2);
 
 }while(WantToPlayAgain());
 
@@ -94,11 +96,11 @@ return 0;
 }
 
 
-void InitializePlayer( Player & player , const char * playerName){
+void InitializePlayer(Player &player,const char *playerName){
 
 	if( playerName != nullptr && strlen(playerName) > 0 )
 	{
-		strcpy( player.playerName, playerName );
+		strcpy(player.playerName, playerName);
 	}
 
 	Initializeship( player.ships[0], AIRCRAFT_CARRIER_SIZE , ST_AIRCRAFT_CARRIER );
@@ -109,7 +111,7 @@ void InitializePlayer( Player & player , const char * playerName){
 
 }
 
-void InitializeShip( Ship & ship , int shipSize , ShipType shipType ){
+void InitializeShip(Ship &ship ,int shipSize,ShipType shipType){
 
 	ship.shipType = shipType;
 	ship.shipSize = shipSize;
@@ -121,11 +123,23 @@ void InitializeShip( Ship & ship , int shipSize , ShipType shipType ){
 
 void PlayGame(Player & player1 , Player & player2){
 
+	SetupBoards(player1);
+	SetupBoards(player2);
 }
 
 bool WantToPlayAgain(){
 
-char input;
-const char validInput[2] = { 'y' , 'n' };
+	char input;
+	const char validInput[2] = { 'y' , 'n' };
+	input = GetCharacter("Would you like to play again? (y/n): ",INPUT_ERROR_STRING,validInput,2,CC_LOWER_CASE);
+
+	return input == 'y';
+}
+
+void SetupBoards(Player &player ){
+
+}
+
+void ClearBoards(Player &player){
 
 }
