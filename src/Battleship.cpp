@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include "Utils.h"
 
 using namespace std;
@@ -7,44 +8,44 @@ enum {
 	AIRCRAFT_CARRIER_SIZE = 5,
 	BATTLESHIP_SIZE = 4,
 	CRUISER_SIZE = 3,
-	DESTROYER_SIZE = 3,
-	SUBMARINE_SIZE = 2,
+		DESTROYER_SIZE = 3,
+		SUBMARINE_SIZE = 2,
 
-	BOARD_SIZE = 10,
-	NUM_SHIPS = 5,
-	PLAYER_NAME_SIZE = 8,
-	MAX_SHIP_SIZE = AIRCRAFT_CARRIER_SIZE
-};
+		BOARD_SIZE = 10,
+		NUM_SHIPS = 5,
+		PLAYER_NAME_SIZE = 8,
+		MAX_SHIP_SIZE = AIRCRAFT_CARRIER_SIZE
+	};
 
-enum ShipType{
+	enum ShipType{
 
-	ST_NONE = 0,
-	ST_AIRCRAFT_CARRIER,
-	ST_BATTLESHIP,
-	ST_CRUISER,
-	ST_DESTROYER,
-	ST_SUBMARINE
-};
+		ST_NONE = 0,
+		ST_AIRCRAFT_CARRIER,
+		ST_BATTLESHIP,
+		ST_CRUISER,
+		ST_DESTROYER,
+		ST_SUBMARINE
+	};
 
-enum ShipOrientationType{
+	enum ShipOrientationType{
 
-	SO_HORIZONTAL = 0,
-	SO_VERTICAL
-};
+		SO_HORIZONTAL = 0,
+		SO_VERTICAL
+	};
 
-struct ShipPostionType{
+	struct ShipPostionType{
 
-	int row;
-	int col;
-};
+		int row;
+		int col;
+	};
 
-struct Ship{
+	struct Ship{
 
-	ShipType shipType;
-	int shipSize;
-	ShipOrientationType orientation;
-	ShipPostionType postion;
-};
+		ShipType shipType;
+		int shipSize;
+		ShipOrientationType orientation;
+		ShipPostionType postion;
+	};
 
 enum GuessType{
 
@@ -67,14 +68,64 @@ struct Player{
 };
 
 
+void InitializePlayer( Player & player , const char * playerName );
+void Initializeship( Ship & ship , int shipSize , ShipType shipType );
+void PlayeGame(Player & player1 , Player & player2 );
+
+bool WantToPlayAgain();
+
+
 int main()
 {
 
-	do{
-		playGame(player1,player2);
+Player player1;
+Player player2;
 
-	}while(wantToPlayAgain());
+InitializePlayer(player1,"Player1");
+InitializePlayer(player2,"Player2");
 
-	return 0;
+do{ 
+	PlayGame(player1 , player2);
 
-}	
+}while(WantToPlayAgain());
+
+return 0;
+
+}
+
+
+void InitializePlayer( Player & player , const char * playerName){
+
+	if( playerName != nullptr && strlen(playerName) > 0 )
+	{
+		strcpy( player.playerName, playerName );
+	}
+
+	Initializeship( player.ships[0], AIRCRAFT_CARRIER_SIZE , ST_AIRCRAFT_CARRIER );
+	Initializeship( player.ships[1], BATTLESHIP_SIZE , ST_BATTLESHIP);
+	Initializeship( player.ships[2] , CRUISER_SIZE , ST_CRUISER );
+	Initializeship(player.ships[3] , DESTROYER_SIZE , ST_DESOYER );
+	Initializeship(player.ships[4] , SUBMARINE_SIZE , ST_SUBMARINE );
+
+}
+
+void InitializeShip( Ship & ship , int shipSize , ShipType shipType ){
+
+	ship.shipType = shipType;
+	ship.shipSize = shipSize;
+	ship.position.row = 0;
+	ship.postion.col = 0;
+	ship.orientation = ST_HORIZONTAL;
+
+}
+
+void PlayGame(Player & player1 , Player & player2){
+
+}
+
+bool WantToPlayAgain(){
+
+char input;
+const char validInput[2] = { 'y' , 'n' };
+
+}
