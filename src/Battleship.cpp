@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Utils.h"
+
 using namespace std;
 
 enum {
@@ -68,6 +69,12 @@ struct Player{
 
 int main()
 {
+
+	do{
+		playGame(player1,player2);
+
+	}while(wantToPlayAgain());
+
 	return 0;
 
 }	
