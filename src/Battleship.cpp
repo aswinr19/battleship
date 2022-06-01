@@ -35,7 +35,7 @@ enum {
 		SO_VERTICAL
 	};
 
-	struct ShipPostionType{
+	struct ShipPositionType{
 
 		int row;
 		int col;
@@ -77,6 +77,14 @@ bool WantToPlayAgain();
 void SetupBoards(Player& player);
 void ClearBoards(Player& player);
 void DrawBoards(const Player& player);
+void DrawSeparatorLine();
+void DrawColumnsRow();
+void DrawShipBoardRow(const Player& player , int row );
+void DrawGuessBoardRow(const Player& player , int row);
+char GetGuessRepresentationAt(const Player& player , int row , int col);
+char GetShipRepresentationAt(const Player& player , int row ,int col);
+const char* GetShipNameForShipType(ShipType shipType);
+ShipPositionType GetBoardPosition();
 
 int main()
 {
@@ -138,10 +146,64 @@ bool WantToPlayAgain(){
 	return input == 'y';
 }
 
+const char* GetShipNameForShipType(ShipType shipType){
+
+	if(shipType == ST_BATTLESHIP){
+		return "Aircraft Carrier";
+	}
+	else if(shipType == ST_BATTLESHIP){
+		return "Battleship";
+	}
+	else if(shipType == ST_CRUISER){
+		return "Cruiser";
+	}
+	else if(shipType == ST_DESTROYER){
+		return "Destroyer";
+	}
+	else if(shipType == ST_SUBMARINE){
+		return "Submarine";
+	}
+	return "None";
+
+}
+
 void SetupBoards(Player& player ){
 
 	ClearBoards(player);
-	DrawBoards(player);
+
+	for(int i = 0; i < NUM_SHIPS; i++){
+
+		DrawBoards(player);
+
+		Ship& currentShip = player.ships[i];
+		ShipPostionType shipPostion;
+		ShipOrientationType shipOrientation;
+
+		bool isValidPlacement = false;
+
+		do{
+
+			cout<<player.playerName<<" please set the position and orientation for your "<<GetShipNameForShipType(currentShip.shipType);
+
+			shipPosition = GetBoardPosition();
+		}while(!isValidPlacement);
+	}
+}
+
+
+ShipPositionType GetBoardPosition(){
+
+	char rowInput;
+	int colInput;
+
+	const char validRowInputs[] = {'A','B','C','D','E','F','G','H','I','J'};
+	const int validColumnInputs[] = {1,2,3,4,5,6,7,8,9,10};
+
+	roeInput = GetCharacter("Please input a row (A-J)",INPUT_ERROR_STRING,validRowInputs,BOARD_SIZE,CC_UPPER_CASE);
+
+
+
+
 }
 
 void ClearBoards(Player& player){
@@ -180,7 +242,7 @@ void DrawColumnsRow(){
 
 }
 
-char GetShipRepresentation(const Player& player, int row, int col){
+char GetShipRepresentationAt(const Player& player, int row, int col){
 
 	if(player.shipBoard[row][col].isHit){
 
@@ -235,7 +297,7 @@ void DrawShipBoardRow(const Player& player , int row){
 
 	for(int c = 0; c < BOARD_SIZE; c++){
 
-		cout<<" "<< GetShipRepresentation(player, row, c) <<" |";
+		cout<<" "<< GetShipRepresentationAt(player, row, c) <<" |";
 	}
 }
 
