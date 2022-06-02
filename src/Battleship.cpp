@@ -85,6 +85,11 @@ char GetGuessRepresentationAt(const Player& player , int row , int col);
 char GetShipRepresentationAt(const Player& player , int row ,int col);
 const char* GetShipNameForShipType(ShipType shipType);
 ShipPositionType GetBoardPosition();
+ShipOrientationType GetShipOrientation();
+bool IsValidPlacement(const Player& player , const Ship&  currentShip , const  ShipPositionType&  shipPosition ,ShipOrientationType  orientation );
+void PlaceShipOnBoard( Player& player , Ship& currentSip , const ShipPositionType& shipPosition ,ShipOrientationType orientation);
+
+
 
 int main()
 {
@@ -186,10 +191,87 @@ void SetupBoards(Player& player ){
 			cout<<player.playerName<<" please set the position and orientation for your "<<GetShipNameForShipType(currentShip.shipType);
 
 			shipPosition = GetBoardPosition();
+			orientation = GetShipOrientation();
+
+			isValidPlacement = IsValidPlacement(player , currentShip , shipPosition , orientation );
+
+			if(!isValidPlacement){
+				
+				cout<<"That was not a valid placement . Please try again." << endl;
+			}
 		}while(!isValidPlacement);
+
+		PlaceShipOnBoard(player, currentShip , shipPostion , orientation );
 	}
+
+	DrawBoards(player); 
 }
 
+bool IsValidPlacement(const Player& player , const Ship& currentShip , const ShipPosition& shipPosition , ShipOrientationType orientation){
+
+	if(orientation == SO_HORIZONTAL){
+
+		for(int c = shipPosition.col; c < (shipPosition.col + currentShip.shipSize); c++){
+
+			if(player.shipBoard[shipPosition.row][c].shipType != ST_NONE || c >= BOARD_SIZE ){
+				
+				return false;
+			}
+		}
+
+	}
+	else{
+
+
+		for(int r = shipPosition.row; r < ( shipPosition.row + currentShip.shipSize ); r++){
+			
+			if(player.shipBoard[r][shipPostion.col].shipType != ST_NONE || r >= BOARD_SIZE){
+				
+				return false;
+
+			}
+		}
+	}
+
+	return true;
+}
+
+void PlaceShipOnBoard(Player& player , Ship& ship , const ShipPostionType& shipPostion , ShipOrientationType orientation){
+
+	currentShip.position = shipPostion;
+	currentShip.orientation = orientation;
+
+	if(orientation == SO_HORIZONTAL){
+
+		for( int c = shipPosition.col; c < (shipPosition.col + currentShip.shipSize ); c++){
+			
+			player.shipBoard[shipPosition.row][c].shipType = currentShip.shipType;
+			player,shipBoard[shipPostion][c].isHit = false;
+		}
+	}
+	else{
+
+		for( int r = shipPostion.row; r < (shipPostion.row + currentSip.shipSize); r++){
+	
+			player.shipBoard[r][shipPostion.col].shipType = currentSip.shipType;
+			player.shipBoard[r][shipPostion.col].isHit = flase;
+
+		}
+	}
+
+}
+ShipPositionType MapBoardPosition(char rowInput , int colInput){
+
+	int realRow = rowInput - 'A';
+	int realCol = colInput - 1;
+
+	ShipPositionType boardPosition;
+
+	boardPosition.row = realRow;
+	boardPosition.col = realCol;
+
+	return boardPosition;
+}
 
 ShipPositionType GetBoardPosition(){
 
@@ -199,13 +281,29 @@ ShipPositionType GetBoardPosition(){
 	const char validRowInputs[] = {'A','B','C','D','E','F','G','H','I','J'};
 	const int validColumnInputs[] = {1,2,3,4,5,6,7,8,9,10};
 
-	roeInput = GetCharacter("Please input a row (A-J)",INPUT_ERROR_STRING,validRowInputs,BOARD_SIZE,CC_UPPER_CASE);
+	rowInput = GetCharacter("Please input a row (A-J): ",INPUT_ERROR_STRING,validRowInputs,BOARD_SIZE,CC_UPPER_CASE);
 
+	colInput = GetInput("Please input a col (1-10): ",INPUT_ERROR_STRING,validColumnInputs,BOARD_SIZE);
 
-
+	return MapBoardPosition( rowInput , colInput);
 
 }
 
+ShipOrientationType GetShipOrientation(){
+
+
+	const char validInput[2] = {'H' , 'V' };
+
+	char input = GetCharacter("Please choose an orientation (H) for horizontal or (V) for vertical: ",INPUT_ERROR_STRING , validInput , 2 , CC_UPPER_CASE);
+
+	if(input == validInput[0]){
+
+		return SO_HORIZONTAL;
+	}
+	else{
+		return SO_VERTICAL;
+	}
+}
 void ClearBoards(Player& player){
 	
 	for(int r = 0; r < BOARD_SIZE; r++){ 
