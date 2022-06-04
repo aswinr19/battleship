@@ -198,6 +198,7 @@ void SetupBoards(Player& player ){
 			if(!isValidPlacement){
 				
 				cout<<"That was not a valid placement . Please try again." << endl;
+				WaitForKeyPress();
 			}
 		}while(!isValidPlacement);
 
@@ -205,6 +206,7 @@ void SetupBoards(Player& player ){
 	}
 
 	DrawBoards(player); 
+	WaitForKeyPress();
 }
 
 bool IsValidPlacement(const Player& player , const Ship& currentShip , const ShipPosition& shipPosition , ShipOrientationType orientation){
@@ -236,9 +238,9 @@ bool IsValidPlacement(const Player& player , const Ship& currentShip , const Shi
 	return true;
 }
 
-void PlaceShipOnBoard(Player& player , Ship& ship , const ShipPostionType& shipPostion , ShipOrientationType orientation){
+void PlaceShipOnBoard(Player& player , Ship& ship , const ShipPostionType& shipPosition , ShipOrientationType orientation){
 
-	currentShip.position = shipPostion;
+	currentShip.position = shipPosition;
 	currentShip.orientation = orientation;
 
 	if(orientation == SO_HORIZONTAL){
@@ -246,15 +248,15 @@ void PlaceShipOnBoard(Player& player , Ship& ship , const ShipPostionType& shipP
 		for( int c = shipPosition.col; c < (shipPosition.col + currentShip.shipSize ); c++){
 			
 			player.shipBoard[shipPosition.row][c].shipType = currentShip.shipType;
-			player,shipBoard[shipPostion][c].isHit = false;
+			player,shipBoard[shipPosition][c].isHit = false;
 		}
 	}
 	else{
 
-		for( int r = shipPostion.row; r < (shipPostion.row + currentSip.shipSize); r++){
+		for( int r = shipPosition.row; r < (shipPosition.row + currentSip.shipSize); r++){
 	
-			player.shipBoard[r][shipPostion.col].shipType = currentSip.shipType;
-			player.shipBoard[r][shipPostion.col].isHit = flase;
+			player.shipBoard[r][shipPosition.col].shipType = currentSip.shipType;
+			player.shipBoard[r][shipPosition.col].isHit = false;
 
 		}
 	}
@@ -411,6 +413,7 @@ void DrawGuessBoardRow(const Player& player , int row){
 }
 void DrawBoards(const Player& player){
 
+	ClearScreen();
 	DrawColumnsRow();
 	DrawColumnsRow();
 
