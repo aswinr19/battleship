@@ -140,6 +140,40 @@ void PlayGame(Player& player1,Player& player2){
 
 	SetupBoards(player1);
 	SetupBoards(player2);
+
+	Player * currentPlayer = &player1;
+	Player * otherPlayer = &player2;
+
+	ShipPositionType guess;
+
+	do{
+		DrawBoards(*currentPlayer);
+
+		bool isValidGuess;
+
+		do{
+			cout<< currentPlayer->playerName<< "what is your guess? "<<endl;
+			guess = GetBoardPosition();
+
+			isValidGuess  = currentPlayer->guessBoard[guess.row][guess.col] == GT_NONE;
+
+
+			if(!isValidGuess){
+				cout<<"That's not a valid guess! Please try again. "<<endl;
+			}
+		}while(!isValidGuess);
+
+		ShipType type = UpdateBoards(guess, *currentPlayer , *otherPlayer);
+		DrawBoards(*currentPlayer);
+
+			if(type != ST_NONE && IsSunk(*otherPlayer , otherPlayer->ships[type-1])){
+			
+				cout<<"You sunk "<<otherPlayer->playerName<<" 's "<<GetShipNameForShipType(type)<<"!"<<endl;
+		}
+			WaitForKeyPress();
+			SwitchPlayers(&currentPlayer , &otherPlayer);
+	}while(!IsGameOver(player1,player2));
+	DisplayWinner(player1,player2);
 }
 
 bool WantToPlayAgain(){
