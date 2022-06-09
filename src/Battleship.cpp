@@ -88,6 +88,7 @@ ShipPositionType GetBoardPosition();
 ShipOrientationType GetShipOrientation();
 bool IsValidPlacement(const Player& player , const Ship&  currentShip , const  ShipPositionType&  shipPosition ,ShipOrientationType  orientation );
 void PlaceShipOnBoard( Player& player , Ship& currentSip , const ShipPositionType& shipPosition ,ShipOrientationType orientation);
+ShipType UpdateBoards(ShipPositionType guess,Player& currentPlayer, Player& otherPlayer);
 
 
 
@@ -174,6 +175,21 @@ void PlayGame(Player& player1,Player& player2){
 			SwitchPlayers(&currentPlayer , &otherPlayer);
 	}while(!IsGameOver(player1,player2));
 	DisplayWinner(player1,player2);
+}
+
+ShipType UpdateBoards(ShipPositionType guess, Player& currentPlayer , Player& otherPlayer ){
+
+	if(otherPlayer.shipBoard[guess.row][guess.col].shipType != ST_NONE){
+
+		currentPlayer.guessBoard[guess.row][guess.col] = GT_HIT;
+		otherPlayer.shipBoard[guess.row][guess.col].isHit = true;
+	}
+	else{
+
+		currentPlayer.guessBoard[guess.row][guess.col] = GT_MISSED;
+	}
+
+	return otherPlayer.shipBoard[guess.row][guess.col].shipType;
 }
 
 bool WantToPlayAgain(){
