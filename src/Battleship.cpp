@@ -89,8 +89,8 @@ ShipOrientationType GetShipOrientation();
 bool IsValidPlacement(const Player& player , const Ship&  currentShip , const  ShipPositionType&  shipPosition ,ShipOrientationType  orientation );
 void PlaceShipOnBoard( Player& player , Ship& currentSip , const ShipPositionType& shipPosition ,ShipOrientationType orientation);
 ShipType UpdateBoards(ShipPositionType guess,Player& currentPlayer, Player& otherPlayer);
-
-
+bool IsGameOver(const Player& player1 ,const Player& player2);
+bool AreGameOver(const Player& player);
 
 int main()
 {
@@ -190,6 +190,50 @@ ShipType UpdateBoards(ShipPositionType guess, Player& currentPlayer , Player& ot
 	}
 
 	return otherPlayer.shipBoard[guess.row][guess.col].shipType;
+}
+
+
+bool IsSunk(const Player& player, const Ship& ship){
+
+	if(ship.orientation == SO_HORIZONTAL){
+		
+		for(int col = ship.position.col; col < (ship.position.col + ship.shipSize); col++){
+			
+			if(!player.shipBoard[ship.position.row][col].isHit){
+
+				return false;
+			}
+		}
+	}
+	else
+	{
+		for(int row = ship.position.row; row < (ship.position.row + ship.shipSize ); row++)
+		{
+	
+			if(!player.shipBoard[row][ship.position.col].isHit){
+
+				return false;
+			}
+		}
+	}
+	return true;
+}
+bool AreAllShipSunk(const Player& player){
+
+	for(int i = 0;i < NUM_SHIPS; i++){
+
+		if(!IsSunk(player, ,player.ships[i])){
+			{
+				return false;
+			}
+	}
+		return true;
+}
+
+bool IsGameOver(const Player& player1 , const Player& player2){
+
+	
+
 }
 
 bool WantToPlayAgain(){
