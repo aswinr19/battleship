@@ -90,7 +90,12 @@ bool IsValidPlacement(const Player& player , const Ship&  currentShip , const  S
 void PlaceShipOnBoard( Player& player , Ship& currentSip , const ShipPositionType& shipPosition ,ShipOrientationType orientation);
 ShipType UpdateBoards(ShipPositionType guess,Player& currentPlayer, Player& otherPlayer);
 bool IsGameOver(const Player& player1 ,const Player& player2);
-bool AreGameOver(const Player& player);
+bool AreAllShipsSunk(const Player& player);
+bool IsSunk(const Player& player,const Ship& ship);
+void SwitchPlayers(Player** currentPlayer, Player** otherPlayer);
+void DisplayWinner(const Player& player1 , const Player& player2);
+
+
 
 int main()
 {
@@ -192,6 +197,26 @@ ShipType UpdateBoards(ShipPositionType guess, Player& currentPlayer , Player& ot
 	return otherPlayer.shipBoard[guess.row][guess.col].shipType;
 }
 
+void SwitchPlayers(Player** currentPlayer,Player** otherPlayer){
+
+	Player * temp = *currentPlayer;
+	*currentPlayer = *otherPlayer;
+	*otherPlayer = temp;
+}
+
+void DisplayWinner(const Player& player1 , const Player& player2){
+
+	if(AreAllShipsSunk(player1)){
+		
+		cout<<"Congratulations "<<player2.playerName<<"! You won!"<<endl;
+	}
+
+	else
+	{
+		cout<<"Congratulations "<<player1.playerName<<"! You won!"<<endl;
+	}	
+
+}
 
 bool IsSunk(const Player& player, const Ship& ship){
 
@@ -218,7 +243,7 @@ bool IsSunk(const Player& player, const Ship& ship){
 	}
 	return true;
 }
-bool AreAllShipSunk(const Player& player){
+bool AreAllShipsSunk(const Player& player){
 
 	for(int i = 0;i < NUM_SHIPS; i++){
 
