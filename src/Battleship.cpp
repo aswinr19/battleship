@@ -46,7 +46,7 @@ enum {
 		ShipType shipType;
 		int shipSize;
 		ShipOrientationType orientation;
-		ShipPostionType position;
+		ShipPositionType position;
 	};
 
 enum GuessType{
@@ -62,7 +62,15 @@ struct ShipPartType{
 	bool isHit;
 };
 
+enum PlayerType{
+
+	PT_HUMAN = 0,
+	PT_AI
+};
+
 struct Player{
+
+	PlayerType playerType;
 	char playerName[PLAYER_NAME_SIZE];
 	Ship ships[NUM_SHIPS];
 	GuessType guessBoard[BOARD_SIZE][BOARD_SIZE];
@@ -94,7 +102,7 @@ bool AreAllShipsSunk(const Player& player);
 bool IsSunk(const Player& player,const Ship& ship);
 void SwitchPlayers(Player** currentPlayer, Player** otherPlayer);
 void DisplayWinner(const Player& player1 , const Player& player2);
-
+PlayerType GetPlayer2Type();
 
 
 int main()
@@ -144,6 +152,11 @@ void InitializeShip(Ship& ship ,int shipSize,ShipType shipType){
 
 void PlayGame(Player& player1,Player& player2){
 
+	ClearScreen();
+
+	player1.playerType = PT_HUMAN;
+	player2.playerType = GetPlayer2Type();
+
 	SetupBoards(player1);
 	SetupBoards(player2);
 
@@ -153,7 +166,11 @@ void PlayGame(Player& player1,Player& player2){
 	ShipPositionType guess;
 
 	do{
+		if(currentPlayer->playerType == PT_HUMAN){
+
 		DrawBoards(*currentPlayer);
+
+		}
 
 		bool isValidGuess;
 
@@ -328,7 +345,7 @@ void SetupBoards(Player& player ){
 	WaitForKeyPress();
 }
 
-bool IsValidPlacement(const Player& player , const Ship& currentShip , const ShipPosition& shipPosition , ShipOrientationType orientation){
+bool IsValidPlacement(const Player& player , const Ship& currentShip , const ShipPositionType& shipPosition , ShipOrientationType orientation){
 
 	if(orientation == SO_HORIZONTAL){
 
@@ -357,7 +374,7 @@ bool IsValidPlacement(const Player& player , const Ship& currentShip , const Shi
 	return true;
 }
 
-void PlaceShipOnBoard(Player& player , Ship& ship , const ShipPostionType& shipPosition , ShipOrientationType orientation){
+void PlaceShipOnBoard(Player& player , Ship& ship , const ShipPositionType& shipPosition , ShipOrientationType orientation){
 
 	currentShip.position = shipPosition;
 	currentShip.orientation = orientation;
@@ -553,4 +570,22 @@ void DrawBoards(const Player& player){
 	cout<<" ";
 	DrawSeparatorLine();
 	cout<<endl;
+}
+
+
+PlayerType GetPlayer2Type(){
+
+	const int validInputs[2] = { 'y','n'};
+
+	int input = GetInteger("Who would you like to play against?\n1. Human\n2. AI\n\n What is your choice? ",INPUT_ERROR_STRING,validInputs,2);
+
+
+	if(input == 1){
+		return PT_HUMAN;
+	}
+	else
+	{
+		return PT_AI;
+	}
+
 }
