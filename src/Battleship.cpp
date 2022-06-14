@@ -106,7 +106,7 @@ void SwitchPlayers(Player** currentPlayer, Player** otherPlayer);
 void DisplayWinner(const Player& player1 , const Player& player2);
 PlayerType GetPlayer2Type();
 ShipPositionType GetAIGuess(const Player& aiPlayer);
-void SetupAIBoards(Playeer& player);
+void SetupAIBoards(Player& player);
 
 
 
@@ -291,7 +291,7 @@ bool AreAllShipsSunk(const Player& player){
 
 	for(int i = 0;i < NUM_SHIPS; i++){
 
-		if(!IsSunk(player, ,player.ships[i])){
+		if(!IsSunk(player ,player.ships[i])){
 			{
 				return false;
 			}
@@ -301,7 +301,7 @@ bool AreAllShipsSunk(const Player& player){
 
 bool IsGameOver(const Player& player1 , const Player& player2){
 
-	
+	return AreAllShipsSunk(player1) || AreAllShipsSunk(player2);	
 
 }
 
